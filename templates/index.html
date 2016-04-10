@@ -42,8 +42,10 @@
 
     <!-- 2. Configure SystemJS -->
     <script>
+    	// Use this configuration to transpile at compile time once with "npm run tsc"
+    	/*
       System.config({
-        packages: {        
+        packages: {
           app: {
             format: 'register',
             defaultExtension: 'js'
@@ -52,6 +54,25 @@
       });
       System.import('app/main')
             .then(null, console.error.bind(console));
+      */
+
+      // Use this configuration to transpile on the fly
+      System.config({
+      	transpiler : "typescript",
+        typescriptOptions : {
+            emitDecoratorMetadata: true,
+            experimentalDecorators: true
+        },
+        map : {
+            typescript: '/node_modules/typescript/lib/typescript.js'
+        },
+        packages: {        
+          app: {
+            format: 'esm',
+            defaultExtension: 'ts'
+          }
+        }
+      });
     </script>
   </head>
 
