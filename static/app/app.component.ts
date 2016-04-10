@@ -138,10 +138,10 @@ export class AppComponent {
 		var that = this;
 		this._competitorService.getPageFromCompetitor(this.searchedUser)
 			.subscribe(function(data) {
-				if (data) {
+				if (data.country && data.page) {
 					that.getCompetitors(data.country, data.page);
 				} else {
-					alert('There\'s no such user.');
+					alert('There\'s no such user. Search is case insensitive.');
 				}
 			});
 	}
