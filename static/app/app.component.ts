@@ -48,7 +48,7 @@ import {CompetitorService} from './competitor.service';
 	      </tr>
 		</thead>
 		<tbody>
-	      <tr [class.highlight]="comp.username === searchedUser" *ngFor="#comp of comps">
+	      <tr [class.highlight]="comp.username.toUpperCase() === searchedUser.toUpperCase()" *ngFor="#comp of comps">
 	        <td>{{comp.row_num}}</td>
 	        <td>{{1 - comp.row_num / totalCompetitors | percent:'2.2-2'}}</td>
 	        <td>{{comp.rank}}</td>
@@ -125,7 +125,7 @@ export class AppComponent {
 	}
 
 	onCountryChange(country) {
-		if (country !== "Select a country") {
+		if (country) {
 			this.getCompetitors(country, 0);
 		}
 	}

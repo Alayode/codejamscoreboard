@@ -85,14 +85,14 @@ def getPageFromUser(user):
                     WHERE country = c1.country and c2.rank <= c1.rank
                 ) AS row_num
             FROM competitor AS c1
-            WHERE username = :username
+            WHERE UPPER(username) = :username
         ''')
-    comps = db.engine.execute(sql, username=user)
+    comps = db.engine.execute(sql, username=user.upper())
     Record = namedtuple('Record', comps.keys())
     records = [Record(*r)._asdict() for r in comps.fetchall()]
     limit = 30
     if len(records) > 0:
-        res = {'page':records[0]['row_num'] / limit, 'country': records[0]['country']}
+        res = {'page':max(0, records[0]['row_num'] - 1) / limit, 'country': records[0]['country']}
     else:
         res = {}
     return jsonify(res)
