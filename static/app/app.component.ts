@@ -55,7 +55,7 @@ import {CompetitorService} from './competitor.service';
 	        <td>{{1 - comp.rank / 27170 | percent: '2.2-2'}}</td>
 	        <td>{{comp.username}}</td>
 	       	<td>{{comp.points}}</td>
-	       	<td><a *ngIf="comp.username === searchedUser" href="https://twitter.com/intent/tweet?button_hashtag=CodeJam2016&text=I%20finished%20{{comp.row_num}}%20out%20of%20{{totalCompetitors}}%20in%20{{currentCountry}} in the Qualification Round" class="twitter-hashtag-button"><i></i>Tweet #CodeJam2016</a></td> 
+	       	<td><a *ngIf="comp.username.toUpperCase() === searchedUser.toUpperCase()" href="https://twitter.com/intent/tweet?button_hashtag=CodeJam2016&text=I%20finished%20{{comp.row_num}}%20out%20of%20{{totalCompetitors}}%20in%20{{currentCountry}} in the Qualification Round" class="twitter-hashtag-button"><i></i>Tweet #CodeJam2016</a></td> 
 	      </tr>
 	    </tbody>
     </table>
