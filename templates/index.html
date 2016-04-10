@@ -52,8 +52,6 @@
           }
         }
       });
-      System.import('app/main')
-            .then(null, console.error.bind(console));
       */
 
       // Use this configuration to transpile on the fly
@@ -73,6 +71,9 @@
           }
         }
       });
+
+      System.import('app/main')
+            .then(null, console.error.bind(console));
     </script>
   </head>
 
