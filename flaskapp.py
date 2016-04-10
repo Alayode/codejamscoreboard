@@ -1,9 +1,11 @@
 import os
 from datetime import datetime
+import json
+from collections import namedtuple
 from flask import Flask, request, flash, url_for, redirect, \
      render_template, abort, send_from_directory, jsonify, Response
 from flask_sqlalchemy import SQLAlchemy
-import json
+from sqlalchemy import text
 
 app = Flask(__name__)
 app.config.from_pyfile('flaskapp.cfg')
@@ -42,10 +44,58 @@ class Competitor(db.Model):
 def index():
     return render_template('index.html')
 
-@app.route('/comps/<country>/<int:offset>')
-def competitorsByCountry(country, offset):
-    comps = Competitor.query.filter_by(country=country).limit(30).offset(offset).all()
-    return Response(json.dumps([c.serialize for c in comps]),  mimetype='application/json')
+@app.route('/comps/<country>/<int:page>')
+def competitorsByCountry(country, page):
+    #comps = Competitor.query.filter_by(country=country) \
+    #    .order_by(Competitor.rank).limit(30).offset(offset).all()
+    #return Response(json.dumps([c.serialize for c in comps]),  mimetype='application/json')
+    sql = text(
+        '''SELECT *,
+                (SELECT COUNT(*)
+                    FROM  competitor AS c2
+                    WHERE country = :country and c2.rank <= c1.rank
+                ) AS row_num
+            FROM competitor AS c1
+            WHERE country = :country
+            LIMIT :limit OFFSET :offset
+        ''')
+    limit = 30
+    offset = page * limit;
+    comps = db.engine.execute(sql, country=country, limit=limit, offset=offset)
+    Record = namedtuple('Record', comps.keys())
+    records = [Record(*r)._asdict() for r in comps.fetchall()]
+
+    tot = Competitor.query.filter_by(country=country).count()
+
+    return Response(json.dumps({'num':tot, 'data':records}),  mimetype='application/json')
+    
+@app.route('/countries')
+def countries():
+    countries = Competitor.query \
+        .distinct(Competitor.country).group_by(Competitor.country) \
+        .order_by(Competitor.country).all()
+    return Response(json.dumps([c.country for c in countries]), mimetype='application/json')
+
+@app.route('/page/<user>')
+def getPageFromUser(user):
+    sql = text(
+        '''SELECT *,
+                (SELECT COUNT(*)
+                    FROM  competitor AS c2
+                    WHERE country = c1.country and c2.rank <= c1.rank
+                ) AS row_num
+            FROM competitor AS c1
+            WHERE username = :username
+        ''')
+    comps = db.engine.execute(sql, username=user)
+    Record = namedtuple('Record', comps.keys())
+    records = [Record(*r)._asdict() for r in comps.fetchall()]
+    limit = 30
+    if len(records) > 0:
+        res = {'page':records[0]['row_num'] / limit, 'country': records[0]['country']}
+    else:
+        res = {}
+    return jsonify(res)
 
 @app.route('/<path:resource>')
 def serveStaticResource(resource):
