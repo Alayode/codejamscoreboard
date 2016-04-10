@@ -6,5 +6,8 @@ setup(name='Scoreboard Jam',
       author='Alessio',
       author_email='defacto133@gmail.com',
       url='http://scoreboardjam-cimballo.rhcloud.com/',
-     install_requires=['Flask>=0.10.1'],
+     install_requires=[
+     	'Flask>=0.10.1',
+     	'Flask-SQLAlchemy==2.1'
+     	],
      )
