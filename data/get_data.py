@@ -3,7 +3,7 @@ from json import load, dump
 
 err = 'err'
 rows = 'rows'
-datafilename = 'competitorsdata.json'
+datafilename = './data/competitorsdata.json'
 
 url = "https://code.google.com/codejam/contest/6254486/scoreboard/do/?cmd=GetScoreboard&contest_id=6254486&show_type=all&start_pos={0}"
 competitor_num = 1

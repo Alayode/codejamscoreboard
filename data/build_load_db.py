@@ -1,9 +1,9 @@
 import sys
 import os
 
-sys.path.append(os.path.realpath('../../'))
+sys.path.append(os.path.realpath('../'))
 import json
-from scoreboardjam.flaskapp import db, Competitor
+from codejamscoreboard.flaskapp import db, Competitor
 
 json_name = 'competitorsdata.json'
 
