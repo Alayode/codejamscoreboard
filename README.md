@@ -8,11 +8,11 @@ Hosted on <a href="openshift.redhat.com"><img src="http://rafabene.com/images/op
 
 Download the scoreboard data by running:
 
-```python get_data.py```
+```python data/get_data.py```
 
 Build the database by running:
 
-```python build_load_db.py```
+```python data/build_load_db.py```
 
 ## Local server
 
